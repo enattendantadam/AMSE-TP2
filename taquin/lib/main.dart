@@ -56,10 +56,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void _startSound() async {
     if (!_isPlaying) {
       _isPlaying = true;
-      await _audioPlayer.setReleaseMode(ReleaseMode.loop);
-      await _audioPlayer
-          .setVolume((_rotateX * _rotateZ) / (3.141 * 2 * 3.141 * 2));
-      await _audioPlayer.setPlaybackRate(_scalefactor); // Apply pitch change
       await _audioPlayer.play(AssetSource('slider_sound.mp3'));
     }
   }
@@ -90,15 +86,19 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Transform(
-              alignment: Alignment.center,
-              transform: Matrix4.identity()
-                ..rotateX(_rotateX)
-                ..rotateZ(_rotateZ)
-                ..scale(_scalefactor),
-              child: Image.network(
-                "https://picsum.photos/512/1024",
-                width: 200,
+            Container(
+              clipBehavior: Clip.hardEdge,
+              decoration: BoxDecoration(color: Colors.white),
+              child: Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.identity()
+                  ..rotateX(_rotateX)
+                  ..rotateZ(_rotateZ)
+                  ..scale(_scalefactor),
+                child: Image.network(
+                  "https://picsum.photos/512/1024",
+                  width: 200,
+                ),
               ),
             ),
             SizedBox(height: 20),
