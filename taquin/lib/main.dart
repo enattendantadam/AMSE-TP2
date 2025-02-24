@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ExerciseViewerPage(),
+      home: const ExerciseViewerPage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -49,7 +49,7 @@ class ExerciseViewerPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ListView(
-              children: [ExercisePage(title: "Exo 1")],
+              children: [],
             )
           ],
         ),
@@ -64,20 +64,25 @@ class ExercisePage extends StatefulWidget {
   final String title;
 
   @override
-  State<ExercisePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<ExercisePage> {
+class _MyHomePageState extends State<MyHomePage> {
   double _rotateX = 0;
   double _rotateZ = 0;
   double _scalefactor = 1;
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isPlaying = false;
+  bool _isChecked = false;
 
   void _startSound() async {
     if (!_isPlaying) {
       _isPlaying = true;
-      await _audioPlayer.play(AssetSource('sound.mp3'));
+      await _audioPlayer.setReleaseMode(ReleaseMode.loop);
+      await _audioPlayer
+          .setVolume((_rotateX * _rotateZ) / (3.141 * 2 * 3.141 * 2));
+      await _audioPlayer.setPlaybackRate(_scalefactor); // Apply pitch change
+      await _audioPlayer.play(AssetSource('slider_sound.mp3'));
     }
   }
 
@@ -89,6 +94,12 @@ class _MyHomePageState extends State<ExercisePage> {
     }
   }
 
+  void _onCheckboxChanged(bool? value) {
+    setState(() {
+      _isChecked = value ?? false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,7 +108,7 @@ class _MyHomePageState extends State<ExercisePage> {
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the ExercisePage object that was created by
+        // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
@@ -107,21 +118,16 @@ class _MyHomePageState extends State<ExercisePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Container(
-              clipBehavior: Clip.hardEdge,
-              width: 400,
-              height: 400,
-              decoration: BoxDecoration(color: Colors.white),
-              child: Transform(
-                alignment: Alignment.center,
-                transform: Matrix4.identity()
-                  ..rotateX(_rotateX)
-                  ..rotateZ(_rotateZ)
-                  ..scale(_scalefactor),
-                child: Image.network(
-                  "https://picsum.photos/512/1024",
-                  width: 200,
-                ),
+            Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.identity()
+                ..rotateX(_rotateX)
+                ..rotateZ(_rotateZ)
+                ..miror(_isChecked)
+                ..scale(_scalefactor),
+              child: Image.network(
+                "https://picsum.photos/512/1024",
+                width: 200,
               ),
             ),
             SizedBox(height: 20),
@@ -151,6 +157,8 @@ class _MyHomePageState extends State<ExercisePage> {
               },
               onChangeEnd: (_) => _stopSound(),
             ),
+            Text("Mirror"),
+            Checkbox(value: _isChecked, onChanged: _onCheckboxChanged),
             Text("Scale"),
             Slider(
               value: _scalefactor,
