@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _startSound() async {
     if (!_isPlaying) {
       _isPlaying = true;
-      await _audioPlayer.play(AssetSource('slider_sound.mp3'));
+      await _audioPlayer.play(AssetSource('sound.mp3'));
     }
   }
 
@@ -88,6 +88,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Container(
               clipBehavior: Clip.hardEdge,
+              width: 400,
+              height: 400,
               decoration: BoxDecoration(color: Colors.white),
               child: Transform(
                 alignment: Alignment.center,
