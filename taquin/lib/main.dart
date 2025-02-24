@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ExerciseViewerPage(title: 'Flutter Demo Home Page'),
+      home: const ExerciseViewerPage(),
     );
   }
 }
@@ -49,7 +49,7 @@ class ExerciseViewerPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ListView(
-              children: [],
+              children: [ExercisePage(title: "Exo 1")],
             )
           ],
         ),
