@@ -6,25 +6,27 @@ void main() {
   runApp(const MyApp());
 }
 
-Tile tile =
-    new Tile(imageURL: 'https://picsum.photos/512', alignment: Alignment(0, 0));
+Tile tile = new Tile(
+    image: Image.network('https://picsum.photos/512'),
+    alignment: Alignment(0.1, 0.1));
 
 class Tile {
-  String imageURL;
+  Image image;
   Alignment alignment;
 
-  Tile({required this.imageURL, required this.alignment});
+  Tile({required this.image, required this.alignment});
 
   Widget croppedImageTile() {
     return FittedBox(
       fit: BoxFit.fill,
       child: ClipRect(
         child: Container(
+          color: Colors.black12,
           child: Align(
             alignment: this.alignment,
             widthFactor: 0.3,
             heightFactor: 0.3,
-            child: Image.network(this.imageURL),
+            child: image,
           ),
         ),
       ),
@@ -133,6 +135,14 @@ class ExerciseViewerPage extends StatelessWidget {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => Exo5a()));
+                    },
+                  ),
+                  ListTile(
+                    title: Text("exo5b"),
+                    subtitle: Text("explication exo5b"),
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Exo5b()));
                     },
                   ),
                 ],
@@ -326,6 +336,51 @@ class _Exo5aState extends State<Exo5a> {
                                   .toInt())
                               .withValues(alpha: 1.0),
                           child: Text(i.toString()))
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Exo5b extends StatefulWidget {
+  const Exo5b({super.key});
+
+  @override
+  State<Exo5b> createState() => _Exo5bState();
+}
+
+class _Exo5bState extends State<Exo5b> {
+  int n = 4;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text("Exo5b"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                width: 500,
+                child: GridView.count(
+                  crossAxisCount: n,
+                  children: [
+                    for (var i = 0; i < n * n; i++)
+                      Tile(
+                              image: Image.asset("2.png"),
+                              alignment: Alignment(
+                                  -1.0 + (2.0 / (n - 1)) * i % n,
+                                  -1.0 + (2.0 / (n - 1)) * i ~/ n))
+                          .croppedImageTile()
                   ],
                 ),
               ),
