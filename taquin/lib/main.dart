@@ -151,6 +151,14 @@ class ExerciseViewerPage extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => Exo5b()));
                     },
                   ),
+                  ListTile(
+                    title: Text("exo5c"),
+                    subtitle: Text("explication exo5c"),
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Exo5c()));
+                    },
+                  ),
                 ],
               ),
             )
@@ -387,7 +395,7 @@ class _Exo5bState extends State<Exo5b> {
                     crossAxisSpacing: 5,
                     mainAxisSpacing: 5,
                     children: [
-                      for (var i = 0; i < 16; i++)
+                      for (var i = 0; i < n * n; i++)
                         Tile(
                                 image: Image.asset("2.png"),
                                 alignment: Alignment(
@@ -400,6 +408,69 @@ class _Exo5bState extends State<Exo5b> {
                   ),
                 ),
               )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Exo5c extends StatefulWidget {
+  const Exo5c({super.key});
+
+  @override
+  State<Exo5c> createState() => _Exo5cState();
+}
+
+class _Exo5cState extends State<Exo5c> {
+  int n = 4;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text("Exo5b"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  width: 500,
+                  child: GridView.count(
+                    crossAxisCount: n,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 5,
+                    children: [
+                      for (var i = 0; i < n * n; i++)
+                        Tile(
+                                image: Image.asset("2.png"),
+                                alignment: Alignment(
+                                    -1.0 + (2.0 / (n - 1)) * (i % n),
+                                    -1.0 + (2.0 / (n - 1)) * (i ~/ n)),
+                                widthFactor: 1 / n,
+                                heightFactor: 1 / n)
+                            .croppedImageTile()
+                    ],
+                  ),
+                ),
+              ),
+              Slider(
+                divisions: 30,
+                value: n.toDouble(),
+                min: 2,
+                max: 30,
+                onChanged: (value) {
+                  setState(() {
+                    n = value.toInt();
+                  });
+                },
+              ),
             ],
           ),
         ),
