@@ -305,10 +305,10 @@ class _Exo5aState extends State<Exo5a> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.network(
-              "https://picsum.photos/512/1024",
-              width: 200,
-            ),
+            GridView.count(
+              crossAxisCount: 4,
+              children: [],
+            )
           ],
         ),
       ),
