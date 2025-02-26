@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ExerciseViewerPage(title: 'Flutter Demo Home Page'),
+      home: const ExerciseViewerPage(),
     );
   }
 }
@@ -49,7 +49,12 @@ class ExerciseViewerPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ListView(
-              children: [],
+              children: [
+                ListTile(
+                  title: Text("exo1"),
+                  subtitle: Text("explication exo1"),
+                )
+              ],
             )
           ],
         ),
@@ -58,16 +63,14 @@ class ExerciseViewerPage extends StatelessWidget {
   }
 }
 
-class ExercisePage extends StatefulWidget {
-  const ExercisePage({super.key, required this.title});
-
-  final String title;
+class Exo1 extends StatefulWidget {
+  const Exo1({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Exo1> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<Exo1> {
   double _rotateX = 0;
   double _rotateZ = 0;
   double _scalefactor = 1;
@@ -110,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text("Exo1"),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -123,7 +126,6 @@ class _MyHomePageState extends State<MyHomePage> {
               transform: Matrix4.identity()
                 ..rotateX(_rotateX)
                 ..rotateZ(_rotateZ)
-                ..miror(_isChecked)
                 ..scale(_scalefactor),
               child: Image.network(
                 "https://picsum.photos/512/1024",
