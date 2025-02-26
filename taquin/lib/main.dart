@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'dart:math' as math;
 
 void main() {
   runApp(const MyApp());
@@ -124,6 +125,14 @@ class ExerciseViewerPage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) => DisplayTileWidget()));
+                    },
+                  ),
+                  ListTile(
+                    title: Text("exo5a"),
+                    subtitle: Text("explication exo5a"),
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Exo5a()));
                     },
                   ),
                 ],
@@ -305,9 +314,21 @@ class _Exo5aState extends State<Exo5a> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            GridView.count(
-              crossAxisCount: 4,
-              children: [],
+            Expanded(
+              child: Container(
+                width: 500,
+                child: GridView.count(
+                  crossAxisCount: 4,
+                  children: [
+                    for (var i = 0; i < 16; i++)
+                      Container(
+                          color: Color((math.Random().nextDouble() * 0xFFFFFF)
+                                  .toInt())
+                              .withValues(alpha: 1.0),
+                          child: Text(i.toString()))
+                  ],
+                ),
+              ),
             )
           ],
         ),
