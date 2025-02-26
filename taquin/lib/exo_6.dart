@@ -11,13 +11,19 @@ math.Random random = new math.Random();
 class Tile {
   Color color = Colors.blue;
   int places =0;
+  int index =0;
   bool select=false;
 
   Tile(
     this.color,
     this.places,
+    this.index,
     this.select,
     );
+  Tile.getIndex(){
+    this.index=index;
+    index+=1;
+  }
   Tile.randomColor() {
     this.color = Color.fromARGB(
         255, random.nextInt(255), random.nextInt(255), random.nextInt(255));
@@ -71,6 +77,7 @@ class PositionedTilesState extends State<PositionedTiles> {
         children: tiles.map((e) {
           return GestureDetector(
             onTap: () {
+              swapTiles();
               print('Tile tapped!');
             },
             child: e,
