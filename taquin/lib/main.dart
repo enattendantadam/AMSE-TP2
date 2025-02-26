@@ -38,6 +38,7 @@ class DisplayTileWidget extends StatelessWidget {
       appBar: AppBar(
         title: Text('Display a Tile as a Cropped Image'),
         centerTitle: true,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Center(
           child: Column(children: [
@@ -74,7 +75,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         useMaterial3: true,
       ),
       home: const ExerciseViewerPage(),
