@@ -13,8 +13,14 @@ Tile tile = new Tile(
 class Tile {
   Image image;
   Alignment alignment;
+  double widthFactor;
+  double heightFactor;
 
-  Tile({required this.image, required this.alignment});
+  Tile(
+      {required this.image,
+      required this.alignment,
+      this.heightFactor = 0.3,
+      this.widthFactor = 0.3});
 
   Widget croppedImageTile() {
     return FittedBox(
@@ -24,8 +30,8 @@ class Tile {
           color: Colors.black12,
           child: Align(
             alignment: this.alignment,
-            widthFactor: 0.3,
-            heightFactor: 0.3,
+            widthFactor: widthFactor,
+            heightFactor: heightFactor,
             child: image,
           ),
         ),
@@ -335,7 +341,10 @@ class _Exo5aState extends State<Exo5a> {
                           color: Color((math.Random().nextDouble() * 0xFFFFFF)
                                   .toInt())
                               .withValues(alpha: 1.0),
-                          child: Text(i.toString()))
+                          child: Text(
+                              (-1.0 + (2.0 / (3)) * (i % 4)).toString() +
+                                  " " +
+                                  (-1.0 + (2.0 / (3)) * (i ~/ 4)).toString()))
                   ],
                 ),
               ),
@@ -364,28 +373,35 @@ class _Exo5bState extends State<Exo5b> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text("Exo5b"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                width: 500,
-                child: GridView.count(
-                  crossAxisCount: n,
-                  children: [
-                    for (var i = 0; i < n * n; i++)
-                      Tile(
-                              image: Image.asset("2.png"),
-                              alignment: Alignment(
-                                  -1.0 + (2.0 / (n - 1)) * i % n,
-                                  -1.0 + (2.0 / (n - 1)) * i ~/ n))
-                          .croppedImageTile()
-                  ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  width: 500,
+                  child: GridView.count(
+                    crossAxisCount: n,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 5,
+                    children: [
+                      for (var i = 0; i < 16; i++)
+                        Tile(
+                                image: Image.asset("2.png"),
+                                alignment: Alignment(
+                                    -1.0 + (2.0 / (n - 1)) * (i % n),
+                                    -1.0 + (2.0 / (n - 1)) * (i ~/ n)),
+                                widthFactor: 1 / n,
+                                heightFactor: 1 / n)
+                            .croppedImageTile()
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
