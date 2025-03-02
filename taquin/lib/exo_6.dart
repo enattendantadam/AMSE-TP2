@@ -61,7 +61,9 @@ class PositionedTiles extends StatefulWidget {
 
 class PositionedTilesState extends State<PositionedTiles> {
   int selectedTile = -1;
-  List<Tile> tileData = List.generate(4, (index) => Tile.configTile(index));
+  int voisinSelected=-1;
+  List voisin=[];
+  List<Tile> tileData = List.generate(16, (index) => Tile.configTile(index));
   late List<Widget> tiles;
 
   @override
@@ -71,36 +73,47 @@ class PositionedTilesState extends State<PositionedTiles> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Moving Tiles'),
-        centerTitle: true,
-      ),
-      body: Row(
-        children: tileData.asMap().entries.map((entry) {
-          final index = entry.key;
-          final tile = entry.value;
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('Moving Tiles'),
+      centerTitle: true,
+    ),
+    body: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 4, 
+          crossAxisSpacing: 10.0, 
+          mainAxisSpacing: 10.0, 
+        ),
+        itemCount: tileData.length,
+        itemBuilder: (context, index) {
+          final tile = tileData[index];
           return GestureDetector(
             onTap: () {
               setState(() {
-                selectedTile = index;
-                tile.select = !tile.select;
+                if (selectedTile == -1) {
+                  selectedTile = index;
+                  tile.select = !tile.select;
+                } else {
+                  voisinSelected = index;
+                  tile.select = !tile.select;
+                  swapTiles(selectedTile, voisinSelected);
+                }
               });
               print('Tile tapped! Index: ${tile.index}');
             },
             child: TileWidget(tile),
           );
-        }).toList(),
+        },
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.swap_horiz),
-        onPressed: swapTiles,
-      ),
-    );
-  }
+    ),
+  );
+}
 
-  void swapTiles() {
+
+  void swapTiles(int i, int j) {
     setState(() {
       if (tileData.length > 1) {
         final temp = tileData[0];
@@ -109,6 +122,7 @@ class PositionedTilesState extends State<PositionedTiles> {
         tiles = tileData.map((tile) => TileWidget(tile)).toList();
       }
       selectedTile = -1;
+      voisinSelected=-1;
     });
   }
 }
