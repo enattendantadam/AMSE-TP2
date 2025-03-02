@@ -62,14 +62,17 @@ class PositionedTiles extends StatefulWidget {
 class PositionedTilesState extends State<PositionedTiles> {
   int selectedTile = -1;
   int voisinSelected=-1;
-  List voisin=[];
+  List<List<int>> matrice = [];
+  List<int> voisin =[];
   List<Tile> tileData = List.generate(16, (index) => Tile.configTile(index));
   late List<Widget> tiles;
 
   @override
   void initState() {
     super.initState();
-    tiles = tileData.map((tile) => TileWidget(tile)).toList();
+    //tiles = tileData.map((tile) => TileWidget(tile)).toList();
+    matrice = List.generate(4, (i) => List.generate(4, (j) => i * 4 + j+1));
+    print(matrice);
   }
 
   @override
@@ -96,10 +99,17 @@ Widget build(BuildContext context) {
                 if (selectedTile == -1) {
                   selectedTile = index;
                   tile.select = !tile.select;
+                  voisin =findVoisins(index+1);
+
                 } else {
-                  voisinSelected = index;
-                  tile.select = !tile.select;
-                  swapTiles(selectedTile, voisinSelected);
+                  if(isVoisin(index)==true){
+                    voisinSelected = index;
+                    tile.select = !tile.select;
+                    swapTiles(selectedTile, voisinSelected);
+                  }
+                  else{
+                    print("vous ne pouvez pas permuttez ces deux tuiles");
+                  }
                 }
               });
               print('Tile tapped! Index: ${tile.index}');
@@ -112,6 +122,25 @@ Widget build(BuildContext context) {
   );
 }
 
+  List<int> findVoisins(int index) {
+    int row = index ~/ 4; 
+    int col = index % 4;
+    List<int> voisins = [];
+    if (row > 0) voisins.add(matrice[row - 1][col]); 
+    if (row < 3) voisins.add(matrice[row + 1][col]);
+    if (col > 0) voisins.add(matrice[row][col - 1]); 
+    if (col < 3) voisins.add(matrice[row][col + 1]); 
+    return voisins;
+  }
+
+  bool isVoisin(int i){
+    for(int e in voisin){
+      if(e==i){
+        return true;
+      }
+    }
+    return false;
+  }
 
   void swapTiles(int i, int j) {
     setState(() {
