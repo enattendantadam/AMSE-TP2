@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -6,27 +5,24 @@ import 'dart:math' as math;
 // Models
 // ==============
 
-math.Random random = new math.Random();
+math.Random random = math.Random();
 
 class Tile {
-  Color color = Colors.blue;
-  int places =0;
-  int index =0;
-  bool select=false;
+  Color color;
+  int places;
+  int index;
+  bool select;
 
-  Tile(
-    this.color,
-    this.places,
-    this.index,
-    this.select,
+  Tile(this.color, this.places, this.index, this.select);
+
+  factory Tile.configTile(int index) {
+    return Tile(
+      Color.fromARGB(
+          255, random.nextInt(255), random.nextInt(255), random.nextInt(255)),
+      index + 1,
+      index,
+      false,
     );
-  Tile.getIndex(){
-    this.index=index;
-    index+=1;
-  }
-  Tile.randomColor() {
-    this.color = Color.fromARGB(
-        255, random.nextInt(255), random.nextInt(255), random.nextInt(255));
   }
 }
 
@@ -41,20 +37,22 @@ class TileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return this.coloredBox();
-  }
-
-  Widget coloredBox() {
     return Container(
+      height: 150,
+      width: 150,
       color: tile.color,
-      child: Padding(
-        padding: EdgeInsets.all(70.0),
-      )
+      padding: EdgeInsets.all(0.0),
+      child: Center(
+        child: Text(
+          'Index: ${tile.index}\nPlace: ${tile.places}\nSelected: ${tile.select}',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
     );
   }
 }
 
-void main() => runApp(new MaterialApp(home: PositionedTiles()));
+void main() => runApp(MaterialApp(home: PositionedTiles()));
 
 class PositionedTiles extends StatefulWidget {
   @override
@@ -62,9 +60,15 @@ class PositionedTiles extends StatefulWidget {
 }
 
 class PositionedTilesState extends State<PositionedTiles> {
+  int selectedTile = -1;
+  List<Tile> tileData = List.generate(4, (index) => Tile.configTile(index));
+  late List<Widget> tiles;
 
-  List<Widget> tiles =
-      List<Widget>.generate(4, (index) => TileWidget(Tile.randomColor()));
+  @override
+  void initState() {
+    super.initState();
+    tiles = tileData.map((tile) => TileWidget(tile)).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,28 +78,37 @@ class PositionedTilesState extends State<PositionedTiles> {
         centerTitle: true,
       ),
       body: Row(
-        children: tiles.map((e) {
+        children: tileData.asMap().entries.map((entry) {
+          final index = entry.key;
+          final tile = entry.value;
           return GestureDetector(
             onTap: () {
-              swapTiles();
-              print('Tile tapped!');
+              setState(() {
+                selectedTile = index;
+                tile.select = !tile.select;
+              });
+              print('Tile tapped! Index: ${tile.index}');
             },
-            child: e,
+            child: TileWidget(tile),
           );
         }).toList(),
       ),
-      
-
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.sentiment_very_satisfied), onPressed: swapTiles),
+        child: Icon(Icons.swap_horiz),
+        onPressed: swapTiles,
+      ),
     );
   }
 
-
-
-  swapTiles() {
+  void swapTiles() {
     setState(() {
-      tiles.insert(1, tiles.removeAt(0));
+      if (tileData.length > 1) {
+        final temp = tileData[0];
+        tileData[0] = tileData[1];
+        tileData[1] = temp;
+        tiles = tileData.map((tile) => TileWidget(tile)).toList();
+      }
+      selectedTile = -1;
     });
   }
 }
