@@ -114,8 +114,6 @@ Widget build(BuildContext context) {
                   selectedTile = index;
                   tileData[index].selected = true;
                   voisin =findVoisins(index);
-                  //print(index);
-                  //print(voisin);
                 } else {
                   if(estVoisin(index)==true){
                     voisinSelected = index;
@@ -170,15 +168,12 @@ Widget build(BuildContext context) {
         final temp = tileData[i];
         tileData[i] = tileData[j];
         tileData[j] = temp;
-        voisin.clear();
-        tileData[i].selected = false;
-        tileData[j].selected = false;
+        tileData.forEach((tile) => tile.selected = false);
+        tileData[j].selected=true;
+        selectedTile = j;
+        voisin = findVoisins(j);
         tiles = tileData.map((tile) => TileWidget(tile,false)).toList();
       }
-      selectedTile = -1;
-      voisinSelected = -1;
-      
-      //tileData.forEach((tile) => tile.selected = false);
     });
   }
 }
