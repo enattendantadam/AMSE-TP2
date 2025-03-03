@@ -42,12 +42,14 @@ class TileWidget extends StatelessWidget {
       width: 150,
       color: tile.color,
       padding: EdgeInsets.all(0.0),
+      /*
       child: Center(
         child: Text(
           'Index: ${tile.index}\nPlace: ${tile.places}\nSelected: ${tile.select}',
           style: TextStyle(color: Colors.white),
         ),
       ),
+      */
     );
   }
 }
@@ -72,8 +74,8 @@ class PositionedTilesState extends State<PositionedTiles> {
     super.initState();
     //tiles = tileData.map((tile) => TileWidget(tile)).toList();
     matrice = List.generate(4, (i) => List.generate(4, (j) => i * 4 + j+1));
-    print(matrice);
-    print (matrice[0][3]);
+    //print(matrice);
+    //print (matrice[0][3]);
   }
 
   @override
@@ -101,8 +103,8 @@ Widget build(BuildContext context) {
                   selectedTile = index;
                   tile.select = !tile.select;
                   voisin =findVoisins(index);
-                  print(index);
-                  print(voisin);
+                  //print(index);
+                  //print(voisin);
                 } else {
                   if(isVoisin(index)==true){
                     voisinSelected = index;
@@ -160,8 +162,6 @@ Widget build(BuildContext context) {
         tileData[j] = temp;
         tiles = tileData.map((tile) => TileWidget(tile)).toList();
       }
-      print(tileData[i].index);
-      print(tileData[j].index);
       selectedTile = -1;
       voisinSelected = -1;
     });
