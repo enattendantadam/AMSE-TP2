@@ -73,6 +73,7 @@ class PositionedTilesState extends State<PositionedTiles> {
     //tiles = tileData.map((tile) => TileWidget(tile)).toList();
     matrice = List.generate(4, (i) => List.generate(4, (j) => i * 4 + j+1));
     print(matrice);
+    print (matrice[0][3]);
   }
 
   @override
@@ -99,8 +100,9 @@ Widget build(BuildContext context) {
                 if (selectedTile == -1) {
                   selectedTile = index;
                   tile.select = !tile.select;
-                  voisin =findVoisins(index+1);
-
+                  voisin =findVoisins(index);
+                  print(index);
+                  print(voisin);
                 } else {
                   if(isVoisin(index)==true){
                     voisinSelected = index;
@@ -114,6 +116,14 @@ Widget build(BuildContext context) {
               });
               print('Tile tapped! Index: ${tile.index}');
             },
+            onDoubleTap: () {
+              setState(() {
+                selectedTile = index;
+                tile.select = !tile.select;
+                voisin = findVoisins(index);
+                print('Double tap détecté! Voisins: $voisin');
+              });
+            },
             child: TileWidget(tile),
           );
         },
@@ -123,13 +133,13 @@ Widget build(BuildContext context) {
 }
 
   List<int> findVoisins(int index) {
-    int row = index ~/ 4; 
-    int col = index % 4;
+    int row = (index) ~/ 4; 
+    int col = ((index) % 4);
     List<int> voisins = [];
-    if (row > 0) voisins.add(matrice[row - 1][col]); 
-    if (row < 3) voisins.add(matrice[row + 1][col]);
-    if (col > 0) voisins.add(matrice[row][col - 1]); 
-    if (col < 3) voisins.add(matrice[row][col + 1]); 
+    if (row > 0) voisins.add(matrice[row - 1][col]-1); // -1 parce qu'on veut les index
+    if (row < 3) voisins.add(matrice[row + 1][col]-1);
+    if (col > 0) voisins.add(matrice[row][col - 1]-1); 
+    if (col < 3) voisins.add(matrice[row][col + 1]-1); 
     return voisins;
   }
 
@@ -144,14 +154,16 @@ Widget build(BuildContext context) {
 
   void swapTiles(int i, int j) {
     setState(() {
-      if (tileData.length > 1) {
-        final temp = tileData[0];
-        tileData[0] = tileData[1];
-        tileData[1] = temp;
+      if (tileData.length > 1 && i >= 0 && j >= 0 && i < tileData.length && j < tileData.length) {
+        final temp = tileData[i];
+        tileData[i] = tileData[j];
+        tileData[j] = temp;
         tiles = tileData.map((tile) => TileWidget(tile)).toList();
       }
+      print(tileData[i].index);
+      print(tileData[j].index);
       selectedTile = -1;
-      voisinSelected=-1;
+      voisinSelected = -1;
     });
   }
 }
