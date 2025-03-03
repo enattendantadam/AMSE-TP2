@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'exo_6.dart';
 import 'dart:math' as math;
 
 void main() {
@@ -46,8 +47,6 @@ class DisplayTileWidget extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Display a Tile as a Cropped Image'),
-        centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Center(
           child: Column(children: [
@@ -81,10 +80,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    Color color = Colors.blue;
+    Color inv = Colors.lightBlue;
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+        colorScheme: ColorScheme.fromSeed(seedColor: color).copyWith(
+          inversePrimary: inv, // Enforce your will
+        ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: color,
+          centerTitle: true,
+        ),
+        navigationBarTheme: NavigationBarThemeData(
+          backgroundColor: color,
+        ),
         useMaterial3: true,
       ),
       home: const ExerciseViewerPage(),
@@ -99,7 +109,6 @@ class ExerciseViewerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text("Exo1"),
       ),
       body: Center(
@@ -159,6 +168,24 @@ class ExerciseViewerPage extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => Exo5c()));
                     },
                   ),
+                  ListTile(
+                    title: Text("exo6"),
+                    subtitle: Text("explication exo5c"),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PositionedTiles()));
+                    },
+                  ),
+                  ListTile(
+                    title: Text("exo7"),
+                    subtitle: Text("explication exo7"),
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Exo7()));
+                    },
+                  ),
                 ],
               ),
             )
@@ -212,12 +239,6 @@ class _MyHomePageState extends State<Exo1> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text("Exo1"),
       ),
       body: Center(
@@ -301,7 +322,6 @@ class _Exo2State extends State<Exo2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text("Exo2"),
       ),
       body: Center(
@@ -331,7 +351,6 @@ class _Exo5aState extends State<Exo5a> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text("Exo5a"),
       ),
       body: Center(
@@ -378,7 +397,6 @@ class _Exo5bState extends State<Exo5b> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text("Exo5b"),
       ),
       body: Padding(
@@ -430,7 +448,6 @@ class _Exo5cState extends State<Exo5c> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text("Exo5b"),
       ),
       body: Padding(
@@ -464,12 +481,97 @@ class _Exo5cState extends State<Exo5c> {
                 divisions: 30,
                 value: n.toDouble(),
                 min: 2,
-                max: 30,
+                max: 25,
                 onChanged: (value) {
                   setState(() {
                     n = value.toInt();
                   });
                 },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Exo7 extends StatefulWidget {
+  const Exo7({super.key});
+
+  @override
+  State<Exo7> createState() => _Exo7State();
+}
+
+class _Exo7State extends State<Exo7> {
+  int n = 4;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        notchMargin: 8.0,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            FilledButton(
+              style: ButtonStyle(),
+              onPressed: () {
+                setState(() {
+                  n = math.max(2, n - 1);
+                });
+              },
+              child: Text("-"),
+            ),
+            SizedBox(width: 10.0),
+            FilledButton(
+              onPressed: () {
+                setState(() {
+                  n = math.min(25, n + 1);
+                });
+              },
+              child: Text("+"),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        child: Text("Start"),
+        onPressed: () {},
+        shape: CircleBorder(),
+      ),
+      appBar: AppBar(
+        title: Text("Exo7"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  width: 500,
+                  child: GridView.count(
+                    crossAxisCount: n,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 5,
+                    children: [
+                      for (var i = 0; i < n * n; i++)
+                        Tile(
+                                image: Image.asset("2.png"),
+                                alignment: Alignment(
+                                    -1.0 + (2.0 / (n - 1)) * (i % n),
+                                    -1.0 + (2.0 / (n - 1)) * (i ~/ n)),
+                                widthFactor: 1 / n,
+                                heightFactor: 1 / n)
+                            .croppedImageTile()
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
