@@ -11,9 +11,9 @@ class Tile {
   Color color;
   int places;
   int index;
-  bool select;
+  bool selected=false;
 
-  Tile(this.color, this.places, this.index, this.select);
+  Tile(this.color, this.places, this.index, this.selected);
 
   factory Tile.configTile(int index) {
     return Tile(
@@ -32,16 +32,26 @@ class Tile {
 
 class TileWidget extends StatelessWidget {
   final Tile tile;
+  final bool isVoisin;
 
-  TileWidget(this.tile);
+  TileWidget(
+    this.tile,
+    this.isVoisin,
+  );
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 150,
       width: 150,
-      color: tile.color,
       padding: EdgeInsets.all(0.0),
+      decoration: BoxDecoration(
+        color: tile.selected ? tile.color.withOpacity(0.5) : tile.color,
+        border: Border.all(
+          color: isVoisin ? Colors.red : Colors.transparent,
+          width: 5.0,
+        ),
+      ),
       /*
       child: Center(
         child: Text(
@@ -72,7 +82,7 @@ class PositionedTilesState extends State<PositionedTiles> {
   @override
   void initState() {
     super.initState();
-    //tiles = tileData.map((tile) => TileWidget(tile)).toList();
+    tiles = tileData.map((tile) => TileWidget(tile,false)).toList();
     matrice = List.generate(4, (i) => List.generate(4, (j) => i * 4 + j+1));
     //print(matrice);
     //print (matrice[0][3]);
@@ -95,20 +105,20 @@ Widget build(BuildContext context) {
         ),
         itemCount: tileData.length,
         itemBuilder: (context, index) {
+          final bool isVoisin = voisin.contains(index);
           final tile = tileData[index];
           return GestureDetector(
             onTap: () {
               setState(() {
                 if (selectedTile == -1) {
                   selectedTile = index;
-                  tile.select = !tile.select;
+                  tileData[index].selected = true;
                   voisin =findVoisins(index);
                   //print(index);
                   //print(voisin);
                 } else {
-                  if(isVoisin(index)==true){
+                  if(estVoisin(index)==true){
                     voisinSelected = index;
-                    tile.select = !tile.select;
                     swapTiles(selectedTile, voisinSelected);
                   }
                   else{
@@ -121,12 +131,12 @@ Widget build(BuildContext context) {
             onDoubleTap: () {
               setState(() {
                 selectedTile = index;
-                tile.select = !tile.select;
+                tileData[index].selected = true;
                 voisin = findVoisins(index);
                 print('Double tap détecté! Voisins: $voisin');
               });
             },
-            child: TileWidget(tile),
+            child: TileWidget(tile,isVoisin),
           );
         },
       ),
@@ -145,7 +155,7 @@ Widget build(BuildContext context) {
     return voisins;
   }
 
-  bool isVoisin(int i){
+  bool estVoisin(int i){
     for(int e in voisin){
       if(e==i){
         return true;
@@ -160,7 +170,7 @@ Widget build(BuildContext context) {
         final temp = tileData[i];
         tileData[i] = tileData[j];
         tileData[j] = temp;
-        tiles = tileData.map((tile) => TileWidget(tile)).toList();
+        tiles = tileData.map((tile) => TileWidget(tile,false)).toList();
       }
       selectedTile = -1;
       voisinSelected = -1;
