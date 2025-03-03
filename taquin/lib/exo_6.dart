@@ -46,7 +46,7 @@ class TileWidget extends StatelessWidget {
       width: 150,
       padding: EdgeInsets.all(0.0),
       decoration: BoxDecoration(
-        color: tile.selected ? tile.color.withOpacity(0.5) : tile.color,
+        color: tile.selected ? Colors.white : tile.color,
         border: Border.all(
           color: isVoisin ? Colors.red : Colors.transparent,
           width: 5.0,
