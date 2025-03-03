@@ -170,10 +170,15 @@ Widget build(BuildContext context) {
         final temp = tileData[i];
         tileData[i] = tileData[j];
         tileData[j] = temp;
+        voisin.clear();
+        tileData[i].selected = false;
+        tileData[j].selected = false;
         tiles = tileData.map((tile) => TileWidget(tile,false)).toList();
       }
       selectedTile = -1;
       voisinSelected = -1;
+      
+      //tileData.forEach((tile) => tile.selected = false);
     });
   }
 }
