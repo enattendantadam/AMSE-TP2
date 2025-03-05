@@ -93,13 +93,13 @@ class _Exo7State extends State<Exo7> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        child: Text(start ? "reset" : "start"),
         onPressed: () {
           setState(() {
             select();
           });
         },
         shape: CircleBorder(),
+        child: Text(start ? "reset" : "start"),
       ),
       appBar: AppBar(
         title: Text("Exo7"),
@@ -123,7 +123,6 @@ class _Exo7State extends State<Exo7> {
                           onTap: !grid[i ~/ n][i % n].voisin
                               ? null
                               : () {
-                                  print(grid[i ~/ n][i % n].voisin);
                                   setState(() {
                                     Tile temp = grid[selectedX][selectedY];
                                     grid[selectedX][selectedY] =
