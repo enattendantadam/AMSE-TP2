@@ -47,7 +47,7 @@ class DisplayTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Display a Tile as a Cropped Image'),
+        title: Text('Exercice 4'),
       ),
       body: Center(
           child: Column(children: [
@@ -81,8 +81,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    Color color = Colors.blue;
-    Color inv = Colors.lightBlue;
+    Color color = const Color.fromARGB(255, 47, 186, 255);
+    Color inv = const Color.fromARGB(255, 83, 200, 255);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(

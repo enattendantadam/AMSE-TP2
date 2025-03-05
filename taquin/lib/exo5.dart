@@ -33,10 +33,11 @@ class _Exo5aState extends State<Exo5a> {
                             color: Color((math.Random().nextDouble() * 0xFFFFFF)
                                     .toInt())
                                 .withValues(alpha: 1.0),
-                            child: Text(
-                                (-1.0 + (2.0 / (3)) * (i % 4)).toString() +
-                                    " " +
-                                    (-1.0 + (2.0 / (3)) * (i ~/ 4)).toString()))
+                            child: Center(
+                              child: Text((i % 4).toString() +
+                                  " " +
+                                  (i ~/ 4).toString()),
+                            ))
                     ],
                   ),
                 ),
