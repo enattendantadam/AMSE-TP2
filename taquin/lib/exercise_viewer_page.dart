@@ -3,7 +3,7 @@ import 'package:taquin/exo1.dart';
 import 'package:taquin/exo2.dart';
 import 'package:taquin/exo5.dart';
 import 'package:taquin/exo7.dart';
-import 'package:taquin/exo_6.dart';
+import 'package:taquin/exo_6.dart' as exo6;
 import 'package:taquin/main.dart';
 
 class ExerciseViewerPage extends StatelessWidget {
@@ -79,7 +79,7 @@ class ExerciseViewerPage extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => PositionedTiles()));
+                              builder: (context) => exo6.PositionedTiles()));
                     },
                   ),
                   ListTile(
