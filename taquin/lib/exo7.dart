@@ -44,14 +44,16 @@ class _Exo7State extends State<Exo7> {
   void select() {
     if (start) {
       start = false;
-      gen();
+      gen(); 
       return;
     }
     start = true;
+    shuffleTiles(); 
     selectedX = random.nextInt(n);
     selectedY = random.nextInt(n);
     grid[selectedX][selectedY].selected = true;
     addVoisin();
+
   }
 
   @override
@@ -145,6 +147,22 @@ class _Exo7State extends State<Exo7> {
       ),
     );
   }
+
+  void shuffleTiles() {
+    List<Tile> flatGrid = grid.expand((row) => row).toList();
+    flatGrid.shuffle(random);
+
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
+        grid[i][j] = flatGrid[i * n + j];
+      }
+    }
+
+    selectedX = -1;
+    selectedY = -1;
+    voisin.clear();
+  }
+
 
   void addVoisin() {
     int i = selectedX;
