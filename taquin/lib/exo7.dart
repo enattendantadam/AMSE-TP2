@@ -51,7 +51,7 @@ class _Exo7State extends State<Exo7> {
     selectedX = random.nextInt(n);
     selectedY = random.nextInt(n);
     grid[selectedX][selectedY].selected = true;
-    addVoisin(selectedX, selectedY);
+    addVoisin();
   }
 
   @override
@@ -130,7 +130,7 @@ class _Exo7State extends State<Exo7> {
                                     grid[i ~/ n][i % n] = temp;
                                     selectedX = i ~/ n;
                                     selectedY = i % n;
-                                    addVoisin(selectedX, selectedY);
+                                    addVoisin();
                                   });
                                 },
                           child: grid[i ~/ n][i % n].croppedImageTile(),
@@ -146,7 +146,9 @@ class _Exo7State extends State<Exo7> {
     );
   }
 
-  void addVoisin(i, j) {
+  void addVoisin() {
+    int i = selectedX;
+    int j = selectedY;
     for (var i = 0; i < voisin.length; i++) {
       voisin[i].voisin = false;
     }
