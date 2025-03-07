@@ -61,10 +61,12 @@ class _Exo7State extends State<Exo7> {
 
   void select() {
     if (start) {
+      start = false;
       gen();
       return;
     }
     start = true;
+    shuffleTiles();
     selectedX = random.nextInt(n);
     selectedY = random.nextInt(n);
     grid[selectedX][selectedY].selected = true;
@@ -179,6 +181,54 @@ class _Exo7State extends State<Exo7> {
         )
       ]),
     );
+  }
+
+  void shuffleTiles() {
+    List<Tile> flatGrid = grid.expand((row) => row).toList();
+    do {
+      flatGrid.shuffle(random);
+    } while (!isSolvable(flatGrid));
+
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
+        grid[i][j] = flatGrid[i * n + j];
+      }
+    }
+
+    selectedX = -1;
+    selectedY = -1;
+    voisin.clear();
+  }
+
+  bool isSolvable(List<Tile> tiles) {
+    int inversions = countInversions(tiles);
+    if (n % 2 == 1) {
+      // Taille impaire
+      return inversions % 2 == 0;
+    } else {
+      // Taille paire
+      int emptyRow = findEmptyTileRow(tiles);
+      int fromBottom = n - emptyRow;
+      return (inversions + fromBottom) % 2 == 0;
+    }
+  }
+
+  int countInversions(List<Tile> tiles) {
+    List<int> values = tiles.map((tile) => tile.index).toList();
+    int inversions = 0;
+    for (int i = 0; i < values.length; i++) {
+      for (int j = i + 1; j < values.length; j++) {
+        if (values[i] > values[j] && values[j] != n * n - 1) {
+          inversions++;
+        }
+      }
+    }
+    return inversions;
+  }
+
+  int findEmptyTileRow(List<Tile> tiles) {
+    int emptyIndex = tiles.indexWhere((tile) => tile.index == n * n - 1);
+    return emptyIndex ~/ n;
   }
 
   void addVoisin() {
