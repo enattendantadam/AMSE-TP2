@@ -128,14 +128,14 @@ class _Exo7State extends State<Exo7> {
           padding: const EdgeInsets.all(8.0),
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Expanded(
+                Flexible(
                   child: Container(
                     width: 500,
                     child: GridView.count(
                       crossAxisCount: n,
                       crossAxisSpacing: 5,
+                      shrinkWrap: true,
                       mainAxisSpacing: 5,
                       children: [
                         for (var i = 0; i < n * n; i++)
@@ -150,6 +150,7 @@ class _Exo7State extends State<Exo7> {
                                       grid[i ~/ n][i % n] = temp;
                                       selectedX = i ~/ n;
                                       selectedY = i % n;
+                                      moves += 1;
                                       addVoisin();
                                     });
                                   },
@@ -159,10 +160,13 @@ class _Exo7State extends State<Exo7> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: 30,
+                ),
                 Text(
                   "Moves made: $moves", // Displays the moves
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                )
               ],
             ),
           ),
