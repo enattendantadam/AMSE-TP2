@@ -1,16 +1,24 @@
 # taquin
 
-A new Flutter project.
+TP2 : 
 
-## Getting Started
+exercice 1 :
+afficher une image venant d'internet sur une page
 
-This project is a starting point for a Flutter application.
+exercice 2 :
+afficher et modifier (rotation/mirror) une image venant d'internet
 
-A few resources to get you started if this is your first Flutter project:
+exercice 3 :
+affichage de tous les exercices sur une page avec des ListTile
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+exercice 4 :
+afficher une image et une partie cropped de cette image
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+exercice 5 :
+page avec une gridview de différentes cases(couleurs puis image) de tailles modulables
+
+exercice 6 :
+échanges de cases voisines sur le gridview
+
+exercice 7 :
+jeu de taquin, avec compteur de coup, utilisation de l'appareil photo pour l'image et taille modifiable
