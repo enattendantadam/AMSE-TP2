@@ -25,7 +25,7 @@ class _Exo7State extends State<Exo7> {
   bool start = false;
   int moves = 0;
   List<Tile> voisin = [];
-  Image image = Image.asset("2.png");
+  Image image = Image.asset("assets/2.png");
   ImagePicker picker = ImagePicker();
 
   _Exo7State() {
