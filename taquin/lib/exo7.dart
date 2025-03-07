@@ -1,9 +1,14 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:taquin/exo_6.dart' as exo6;
+import 'package:flutter/foundation.dart';
 import 'package:taquin/main.dart';
+import 'package:image_picker/image_picker.dart';
 
 math.Random random = math.Random();
+bool onBrowser =
+    kIsWeb || Platform.isMacOS || Platform.isWindows || Platform.isLinux;
 
 class Exo7 extends StatefulWidget {
   const Exo7({super.key});
@@ -18,17 +23,30 @@ class _Exo7State extends State<Exo7> {
   int selectedX = -1;
   int selectedY = -1;
   bool start = false;
+  int moves = 0;
   List<Tile> voisin = [];
+  Image image = Image.asset("2.png");
+  ImagePicker picker = ImagePicker();
 
   _Exo7State() {
     gen();
   }
+  Future<void> takePicture() async {
+    final XFile? imageFile = await picker.pickImage(source: ImageSource.camera);
+
+    if (imageFile != null) {
+      image = Image.file(File(imageFile.path));
+      gen();
+    }
+  }
 
   void gen() {
+    moves = 0;
+    start = false;
     grid = List.generate(n, (rowIndex) {
       return List.generate(n, (colIndex) {
         return Tile(
-          image: Image.asset("2.png"),
+          image: image,
           alignment: Alignment(
             -1.0 + (2.0 / (n - 1)) * colIndex,
             -1.0 + (2.0 / (n - 1)) * rowIndex,
@@ -43,7 +61,6 @@ class _Exo7State extends State<Exo7> {
 
   void select() {
     if (start) {
-      start = false;
       gen();
       return;
     }
@@ -104,45 +121,63 @@ class _Exo7State extends State<Exo7> {
       appBar: AppBar(
         title: Text("Exo7"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                child: Container(
-                  width: 500,
-                  child: GridView.count(
-                    crossAxisCount: n,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
-                    children: [
-                      for (var i = 0; i < n * n; i++)
-                        GestureDetector(
-                          onTap: !grid[i ~/ n][i % n].voisin
-                              ? null
-                              : () {
-                                  setState(() {
-                                    Tile temp = grid[selectedX][selectedY];
-                                    grid[selectedX][selectedY] =
-                                        grid[i ~/ n][i % n];
-                                    grid[i ~/ n][i % n] = temp;
-                                    selectedX = i ~/ n;
-                                    selectedY = i % n;
-                                    addVoisin();
-                                  });
-                                },
-                          child: grid[i ~/ n][i % n].croppedImageTile(),
-                        )
-                    ],
+      body: Stack(children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    width: 500,
+                    child: GridView.count(
+                      crossAxisCount: n,
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 5,
+                      children: [
+                        for (var i = 0; i < n * n; i++)
+                          GestureDetector(
+                            onTap: !grid[i ~/ n][i % n].voisin
+                                ? null
+                                : () {
+                                    setState(() {
+                                      Tile temp = grid[selectedX][selectedY];
+                                      grid[selectedX][selectedY] =
+                                          grid[i ~/ n][i % n];
+                                      grid[i ~/ n][i % n] = temp;
+                                      selectedX = i ~/ n;
+                                      selectedY = i % n;
+                                      addVoisin();
+                                    });
+                                  },
+                            child: grid[i ~/ n][i % n].croppedImageTile(),
+                          )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+                Text(
+                  "Moves made: $moves", // Displays the moves
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
+        Positioned(
+          bottom: 10,
+          right: 10,
+          child: IconButton(
+            icon: Icon(Icons.camera_alt),
+            onPressed: onBrowser
+                ? null
+                : () {
+                    takePicture();
+                  },
+          ),
+        )
+      ]),
     );
   }
 
